@@ -28,4 +28,18 @@ defmodule Missionable.AccountsFixtures do
     [_, token | _] = String.split(captured_email.text_body, "[TOKEN]")
     token
   end
+
+  @doc """
+  Generate a wallet.
+  """
+  def wallet_fixture(attrs \\ %{}) do
+    {:ok, wallet} =
+      attrs
+      |> Enum.into(%{
+
+      })
+      |> Missionable.Accounts.create_wallet()
+
+    wallet
+  end
 end

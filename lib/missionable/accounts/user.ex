@@ -2,6 +2,8 @@ defmodule Missionable.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  # after_insert
+
   schema "users" do
     field :email, :string
     field :name, :string
@@ -10,6 +12,7 @@ defmodule Missionable.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
+    has_one :wallet, Missionable.Accounts.Wallet
     timestamps()
   end
 
@@ -36,6 +39,13 @@ defmodule Missionable.Accounts.User do
     |> validate_email()
     |> validate_name()
     |> validate_password(opts)
+    |> create_wallet()
+  end
+
+  def create_wallet(user) do
+    user
+    |> put_assoc(:wallet, %{token_id: :crypto.hash(:md5 , "Elixir") |> Base.encode16()})
+    |> cast_assoc(:wallet, required: true)
   end
 
   defp validate_email(changeset) do

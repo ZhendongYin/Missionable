@@ -89,4 +89,9 @@ defmodule MissionableWeb.Router do
     get "/users/confirm/:token", UserConfirmationController, :edit
     post "/users/confirm/:token", UserConfirmationController, :update
   end
+
+  scope "/", MissionableWeb do
+    pipe_through [:browser, :require_authenticated_user]
+    get "/wallet", WalletController, :index
+  end
 end
